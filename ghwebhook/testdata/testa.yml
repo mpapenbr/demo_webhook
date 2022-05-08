@@ -1,0 +1,7 @@
+actions:
+  - from: demo_app1
+    update:
+      - repo: demo_deploy1
+        file: versions.properties
+        regex: |
+          (?'key'\s*version:\s*)(?'value'v.*?)(?'other'$|\s+\.*)
