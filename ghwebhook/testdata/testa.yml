@@ -4,4 +4,4 @@ actions:
       - repo: demo_deploy1
         file: versions.properties
         regex: |
-          (?'key'\s*version:\s*)(?'value'v.*?)(?'other'$|\s+\.*)
+          (?P<key>\s*version:\s*)(?P<value>v.*?)(?P<other>$|\s+\.*)

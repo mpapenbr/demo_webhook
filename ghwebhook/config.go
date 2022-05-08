@@ -14,15 +14,16 @@ type Update struct {
 }
 
 type Action struct {
-	From   string
-	Update []Update
+	From      string
+	Component string
+	Update    []Update
 }
 
 type Config struct {
 	Actions []Action
 }
 
-func getConfig(configFilename string) (*Config, error) {
+func GetConfig(configFilename string) (*Config, error) {
 	yamlFile, err := ioutil.ReadFile(configFilename)
 	if err != nil {
 		log.Printf("yamlFile.Get err   #%v ", err)

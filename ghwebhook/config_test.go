@@ -24,12 +24,12 @@ func Test_getConfig(t *testing.T) {
 		{
 			name: "test a",
 			args: args{configFilename: "testdata/testa.yml"},
-			want: &Config{Actions: []Action{{From: "demo_app1", Update: []Update{{Repo: "demo_deploy1", File: "versions.properties", Regex: `(?'key'\s*version:\s*)(?'value'v.*?)(?'other'$|\s+\.*)`}}}}},
+			want: &Config{Actions: []Action{{From: "demo_app1", Update: []Update{{Repo: "demo_deploy1", File: "versions.properties", Regex: `(?P<key>\s*version:\s*)(?P<value>v.*?)(?P<other>$|\s+\.*)`}}}}},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := getConfig(tt.args.configFilename)
+			got, err := GetConfig(tt.args.configFilename)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("getConfig() error = %v, wantErr %v", err, tt.wantErr)
 				return

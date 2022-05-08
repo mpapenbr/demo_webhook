@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 
+	"ghwebhook/ghwebhook"
+
 	"github.com/go-playground/webhooks/v6/github"
 	"github.com/gofiber/fiber/v2"
 	"github.com/valyala/fasthttp/fasthttpadaptor"
@@ -27,6 +29,10 @@ func main() {
 	*/
 	app := fiber.New()
 
+	config, err := ghwebhook.GetConfig("config.yml")
+	if err != nil {
+		log.Fatal("Could not read config")
+	}
 	/**
 	Create POST endpoint on the "/webhook" route to handle incoming webhooks
 	*/
@@ -38,11 +44,11 @@ func main() {
 		if err != nil {
 			log.Println("Error converting request", err)
 		}
-		payload, e := hook.Parse(httpRequest, github.CreateEvent)
+		payload, e := hook.Parse(httpRequest, github.ReleaseEvent)
 		if e != nil {
 			log.Println("Error parsing", e)
 		}
-		// fmt.Printf("Payload: %v %+v\n", payload)
+		// fmt.Printf("Payload: %v \n", payload)
 		switch payload.(type) {
 		case github.CreatePayload:
 			{
@@ -53,7 +59,10 @@ func main() {
 		case github.ReleasePayload:
 			{
 				releasePayload := payload.(github.ReleasePayload)
-				fmt.Printf("%+v\n", releasePayload)
+				println(releasePayload.Action)
+				if releasePayload.Action == "published" {
+					ghwebhook.ProcessNewRelease(config, releasePayload)
+				}
 
 			}
 		case github.PushPayload:
